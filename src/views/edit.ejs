@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movie & Series Watchlist</title>
+  <meta name="description" content="Simple and Minimal Web app for Manage Movie & Series Watchlist.">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.3/css/bulma.min.css" integrity="sha512-4EnjWdm80dyWrJ7rh/tlhNt6fJL52dSDSHNEqfdVmBLpJLPrRYnFa+Kn4ZZL+FRkDL5/7lAXuHylzJkpzkSM2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
+<style>
+html,
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: "Geist Mono", serif;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+body {
+  background-color: #dff0fa;
+  color: #121212;
+  font-family: 16px;
+  padding-bottom: 20px;
+}
+
+.container {
+  font-family: "Geist Mono", serif;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+h1.title {
+  color: #181116;
+  text-align: center;
+  font-family: "Geist Mono", serif;
+  font-size: 23px;
+  border-bottom: 2px solid #f58235;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+.button.is-primary {
+  background-color: #50fa7b;
+  border: none;
+  color: #282a36;
+}
+
+.button.is-link {
+  background-color: #bd93f9;
+  border: none;
+  color: #282a36;
+}
+.button {
+  font-family: "Geist Mono", serif;
+}
+.textarea,
+.input,
+.select {
+  font-family: "Geist Mono", serif;
+  border: none;
+}
+a {
+  color: #100420;
+  font-size: 1.1rem;
+  text-decoration: none;
+  font-family: "Geist Mono", serif;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
+p {
+  font-family: "Geist Mono", serif;
+  font-size: 1rem;
+  color: #f8f8f2;
+}
+select {
+  font-family: "Geist Mono", serif;
+}
+</style>
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <h1 class="title">Edit Movie/Series</h1>
+    <form action="/edit" method="POST">
+      <input type="hidden" name="id" value="<%= item.id %>">
+      <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+          <input class="input is-warning" type="text" name="name" value="<%= item.name %>">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Status</label>
+        <div class="control">
+          <div class="select is-warning">
+            <select name="completed">
+              <option value="completed" <%= item.completed === 'completed' ? 'selected' : '' %>>Completed</option>
+              <option value="not-completed" <%= item.completed === 'not-completed' ? 'selected' : '' %>>Not Completed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Notes</label>
+        <div class="control">
+          <textarea class="textarea is-warning" name="notes"><%= item.notes %></textarea>
+        </div>
+      </div>
+      <div class="control">
+        <button class="button is-primary">Save Changes</button>
+      </div>
+    </form>
+    <hr>
+    <a href="/" class="button is-info">Back to Watchlist</a>
+  </div>
+</section>
+</body>
+</html>
