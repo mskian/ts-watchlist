@@ -1,20 +1,23 @@
 [
   {
-    "id": "1736092684867",
+    "id": "1736133596579",
     "name": "Squid Game",
     "completed": "completed",
-    "notes": "waiting for season 3 (Netflix)"
+    "its": "tv-show",
+    "notes": "Waiting for Season 3"
   },
   {
-    "id": "1736095597707",
+    "id": "1736135090805",
     "name": "Breaking Bad",
     "completed": "completed",
-    "notes": "Web Series (netflix)"
+    "its": "tv-show",
+    "notes": "Full season Available in Netflix"
   },
   {
-    "id": "1736098442988",
+    "id": "1736139028182",
     "name": "Money Heist",
     "completed": "completed",
+    "its": "movie",
     "notes": "TV Show available in Netflix"
   }
 ]

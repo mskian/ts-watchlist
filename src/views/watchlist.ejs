@@ -121,44 +121,16 @@ h1.title {
 p {
   font-family: "Geist Mono", serif;
   font-size: 1rem;
-  color: #290424;
+  color: #ece250;
   word-wrap: break-word;
 }
-select {
-  font-family: "Geist Mono", serif;
-}
-.toggle-switch {
-  display: none;
-}
-
-.toggle-label {
-  display: inline-block;
-  width: 35px;
-  height: 18px;
+.box {
   position: relative;
-  cursor: pointer;
-  background-color: #ccc;
-  border-radius: 18px;
-  transition: background-color 0.3s ease;
-}
-
-.toggle-label .slider {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  background-color: #fff;
-  border-radius: 50%;
-  top: 2px;
-  left: 2px;
-  transition: transform 0.3s ease;
-}
-
-.toggle-switch:checked + .toggle-label {
-  background-color: #50fa7b;
-}
-
-.toggle-switch:checked + .toggle-label .slider {
-  transform: translateX(17px);
+  background: #2C3A47;
+  color: #fade42;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: "Geist Mono", serif;
+  letter-spacing: .04em;
 }
 .navbar-item {
     font-family: "Geist Mono", serif;
@@ -187,78 +159,20 @@ select {
 </nav>
   <section class="section">
   <div class="container">
-    <h1 class="title">Add Watchlist</h1>
-    <form action="/add" method="POST">
-        <label class="label">Name</label>
-        <div class="control">
-          <input class="input is-warning" type="text" name="name" placeholder="Moive or Series Name">
-        </div>
-        <label class="label">Status</label>
-        <div class="control">
-          <div class="select is-warning">
-            <select name="completed">
-              <option value="completed">Completed</option>
-              <option value="not-completed">Not Completed</option>
-            </select>
-          </div>
-          <br><br>
-          <button type="button" class="button is-warning" onclick="toggleStatus()">
-            Change Status
-          </button>
-        </div>
-        <label class="label">It's a</label>
-        <div class="control">
-          <div class="select is-warning">
-            <select name="its">
-              <option value="movie">Movie</option>
-              <option value="tv-show">TV Show</option>
-            </select>
-          </div>
-        </div>
-      <div class="field">
-        <label class="label">Notes</label>
-        <div class="control">
-          <textarea class="textarea is-warning" name="notes"></textarea>
-        </div>
-      </div>
-      <div class="control">
-        <button class="button is-primary">Add</button>
-      </div>
-    </form>
-    <div class="mt-6 mb-6">
+    <h1 class="title mb-6">My Watchlist</h1>
+    <div class="mb-4">
       <% if (items.length === 0) { %>
         <p>No items in the watchlist!</p>
       <% } else { %>
           <% items.forEach(item => { %>
-                <p class="mb-5">
-                  Name: <%= item.name %><br>
-                  It's a: <%= item.its === 'movie' ? 'Movie' : item.its === 'tv-show' ? 'TV Show' : 'Unknown' %><br>
-                  Status: <%= item.completed === 'completed' ? 'Completed' : 'Not Completed' %><br>
-                  <%= item.notes %>
-                  <div class="field mb-4">
-                    <p class="mb-2">Change Watching Status:</p>
-                    <form action="/toggle/<%= item.id %>" method="POST" style="display:inline;">
-                      <input 
-                        type="checkbox" 
-                        id="toggle-<%= item.id %>" 
-                        name="completed" 
-                        class="toggle-switch"
-                        onchange="this.form.submit()" 
-                        <%= item.completed === 'completed' ? 'checked' : '' %>
-                      >
-                      <label for="toggle-<%= item.id %>" class="toggle-label">
-                        <span class="slider"></span>
-                      </label>
-                    </form>
-                  </div>                  
+            <div class="box">
+                <p class="mb-5 mt-5">
+                  🎬 Name: <%= item.name %><br>
+                  📺 It's a: <%= item.its === 'movie' ? 'Movie' : item.its === 'tv-show' ? 'TV Show' : 'Unknown' %><br>
+                  ✅ Status: <%= item.completed === 'completed' ? 'Completed' : 'Not Completed' %><br>
+                  🍿 <%= item.notes %>            
                 </p>
-            <div class="buttons mb-4">
-              <a class="button is-link is-small" href="/edit/<%= item.id %>">Edit</a>
-              <form action="/delete/<%= item.id %>" method="POST">
-                <button class="button is-danger is-small">Delete</button>
-              </form>
             </div>
-            <hr>
           <% }) %>
       <% } %>
     </div>
@@ -292,11 +206,6 @@ select {
   </div>
 </section>
 <script>
-  function toggleStatus() {
-    const selectElement = document.querySelector('select[name="completed"]');
-    const currentStatus = selectElement.value;
-    selectElement.value = currentStatus === 'completed' ? 'not-completed' : 'completed';
-  }
   document.addEventListener('DOMContentLoaded', () => {
       const navbarBurger = document.querySelector('.navbar-burger');
       const navbarMenu = document.querySelector('#navbarMenu');

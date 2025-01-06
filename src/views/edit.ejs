@@ -117,8 +117,23 @@ select {
               <option value="not-completed" <%= item.completed === 'not-completed' ? 'selected' : '' %>>Not Completed</option>
             </select>
           </div>
+          <br><br>
+          <button type="button" class="button is-warning" onclick="toggleStatus()">
+            Change Status
+          </button>
         </div>
-      </div>
+      </div>  
+      <div class="field">
+        <label class="label">It's a</label>
+        <div class="control">
+          <div class="select is-warning">
+            <select name="its">
+              <option value="movie" <%= item.its === 'movie' ? 'selected' : '' %>>Movie</option>
+              <option value="tv-show" <%= item.its === 'tv-show' ? 'selected' : '' %>>TV Show</option>
+            </select>
+          </div>
+        </div>
+      </div>      
       <div class="field">
         <label class="label">Notes</label>
         <div class="control">
@@ -130,8 +145,15 @@ select {
       </div>
     </form>
     <hr>
-    <a href="/" class="button is-info">Back to Watchlist</a>
+    <a href="/" class="button is-info">Back to Dashboard</a>
   </div>
 </section>
+<script>
+  function toggleStatus() {
+    const selectElement = document.querySelector('select[name="completed"]');
+    const currentStatus = selectElement.value;
+    selectElement.value = currentStatus === 'completed' ? 'not-completed' : 'completed';
+  }
+</script>
 </body>
 </html>

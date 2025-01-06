@@ -6,6 +6,7 @@ export interface WatchlistItem {
   id: string;
   name: string;
   completed: string;
+  its: string;
   notes: string;
 }
 
