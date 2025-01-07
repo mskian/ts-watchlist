@@ -37,11 +37,11 @@ pnpm start
 
 ```sh
 
-## access Dashboard
+## Home Page
 http://localhost:6020/
 
-## Watchlist
-http://localhost:6020/watchlist
+## Add New Item
+http://localhost:6020/dashboard
 
 ```
 

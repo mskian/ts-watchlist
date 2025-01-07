@@ -164,6 +164,32 @@ select {
     font-family: "Geist Mono", serif;
     text-transform: uppercase;
 }
+#snackbar-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  font-family: "Geist Mono", serif;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 500px;
+  word-wrap: break-word;
+}
+.snackbar {
+  font-family: "Geist Mono", serif;
+  margin-bottom: 10px;
+  animation: fade-in 0.3s ease-out;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>
 </head>
 <body>
@@ -180,8 +206,8 @@ select {
     </div>
     <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-end">
-            <a class="navbar-item" href="/">Dashboard</a>
-            <a class="navbar-item" href="/watchlist">MY List</a>
+            <a class="navbar-item" href="/">HOME</a>
+            <a class="navbar-item" href="/dashboard">Add List</a>
         </div>
     </div>
 </nav>
@@ -233,23 +259,22 @@ select {
                 <p class="mb-5">
                   Name: <%= item.name %><br>
                   It's a: <%= item.its === 'movie' ? 'Movie' : item.its === 'tv-show' ? 'TV Show' : 'Unknown' %><br>
-                  Status: <%= item.completed === 'completed' ? 'Completed' : 'Not Completed' %><br>
+                  <span id="status-<%= item.id %>">Status: <%= item.completed === 'completed' ? 'Completed' : 'Not Completed' %></span><br>
                   <%= item.notes %>
                   <div class="field mb-4">
                     <p class="mb-2">Change Watching Status:</p>
-                    <form action="/toggle/<%= item.id %>" method="POST" style="display:inline;">
+                    <form style="display:inline;" onsubmit="toggleCompletion(event, '<%= item.id %>')">
                       <input 
                         type="checkbox" 
                         id="toggle-<%= item.id %>" 
                         name="completed" 
                         class="toggle-switch"
-                        onchange="this.form.submit()" 
                         <%= item.completed === 'completed' ? 'checked' : '' %>
                       >
                       <label for="toggle-<%= item.id %>" class="toggle-label">
                         <span class="slider"></span>
                       </label>
-                    </form>
+                    </form>                                      
                   </div>                  
                 </p>
             <div class="buttons mb-4">
@@ -289,7 +314,8 @@ select {
         <%= successMessage %>
       </div>
     <% } %>
-  </div>
+<div id="snackbar-container" class="is-hidden"></div>
+</div>
 </section>
 <script>
   function toggleStatus() {
@@ -308,6 +334,65 @@ select {
           });
       }
   });
+document.addEventListener('change', (event) => {
+  if (event.target.classList.contains('toggle-switch')) {
+    const id = event.target.id.split('-')[1];
+    toggleCompletion(event, id);
+  }
+});
+async function toggleCompletion(event, id) {
+  event.preventDefault();
+
+  try {
+    const checkbox = event.target;
+    const status = checkbox.checked ? 'completed' : 'not-completed';
+
+    const response = await fetch(`/toggle/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completed: status }),
+    });
+
+    const result = await response.json();
+
+    showSnackbar(result.message, result.success ? 'is-success' : 'is-danger');
+    if (result.success) {
+    const statusElement = document.querySelector(`#status-${id}`);
+      if (statusElement) {
+        statusElement.textContent = status === 'completed' ? 'Status: Completed' : 'Status: Not Completed';
+      }
+    } else {
+      checkbox.checked = !checkbox.checked;
+    }
+  } catch (error) {
+    console.error('Error toggling completion:', error);
+    showSnackbar('An error occurred while updating the status. Please try again.', 'is-danger');
+  }
+}
+
+/**
+ * Displays a snackbar notification.
+ * @param {string} message - The message to display.
+ * @param {string} type - The Bulma color class (e.g., 'is-success', 'is-danger').
+ */
+function showSnackbar(message, type) {
+  const container = document.getElementById('snackbar-container');
+  const snackbar = document.createElement('div');
+  snackbar.className = `notification ${type} is-light snackbar`;
+  snackbar.textContent = message;
+  const closeButton = document.createElement('button');
+  closeButton.className = 'delete';
+  closeButton.addEventListener('click', () => snackbar.remove());
+  snackbar.prepend(closeButton);
+  container.appendChild(snackbar);
+  container.classList.remove('is-hidden');
+  setTimeout(() => {
+    snackbar.remove();
+    if (container.childElementCount === 0) {
+      container.classList.add('is-hidden');
+    }
+  }, 3000);
+}
 </script>
 </body>
 </html>

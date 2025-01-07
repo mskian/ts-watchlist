@@ -136,6 +136,65 @@ p {
     font-family: "Geist Mono", serif;
     text-transform: uppercase;
 }
+#snackbar-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  font-family: "Geist Mono", serif;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 500px;
+  word-wrap: break-word;
+}
+.snackbar {
+  font-family: "Geist Mono", serif;
+  margin-bottom: 10px;
+  animation: fade-in 0.3s ease-out;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.toggle-switch {
+  display: none;
+}
+
+.toggle-label {
+  display: inline-block;
+  width: 35px;
+  height: 18px;
+  position: relative;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-label .slider {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background-color: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch:checked + .toggle-label {
+  background-color: #50fa7b;
+}
+
+.toggle-switch:checked + .toggle-label .slider {
+  transform: translateX(17px);
+}
 </style>
 </head>
 <body>
@@ -152,8 +211,8 @@ p {
     </div>
     <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-end">
-            <a class="navbar-item" href="/">Dashboard</a>
-            <a class="navbar-item" href="/watchlist">MY List</a>
+            <a class="navbar-item" href="/">Home</a>
+            <a class="navbar-item" href="/dashboard">Add List</a>
         </div>
     </div>
 </nav>
@@ -169,9 +228,24 @@ p {
                 <p class="mb-5 mt-5">
                   🎬 Name: <%= item.name %><br>
                   📺 It's a: <%= item.its === 'movie' ? 'Movie' : item.its === 'tv-show' ? 'TV Show' : 'Unknown' %><br>
-                  ✅ Status: <%= item.completed === 'completed' ? 'Completed' : 'Not Completed' %><br>
+                  ✅ <span id="status-<%= item.id %>">Status: <%= item.completed === 'completed' ? 'Completed' : 'Not Completed' %></span><br>
                   🍿 <%= item.notes %>            
                 </p>
+                <div class="field mb-4">
+                  <p class="mb-2">Change Status:</p>
+                  <form style="display:inline;" onsubmit="toggleCompletion(event, '<%= item.id %>')">
+                    <input 
+                      type="checkbox" 
+                      id="toggle-<%= item.id %>" 
+                      name="completed" 
+                      class="toggle-switch"
+                      <%= item.completed === 'completed' ? 'checked' : '' %>
+                    >
+                    <label for="toggle-<%= item.id %>" class="toggle-label">
+                      <span class="slider"></span>
+                    </label>
+                  </form>                                      
+                </div>
             </div>
           <% }) %>
       <% } %>
@@ -203,7 +277,8 @@ p {
         <%= successMessage %>
       </div>
     <% } %>
-  </div>
+<div id="snackbar-container" class="is-hidden"></div>
+</div>
 </section>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -217,6 +292,65 @@ p {
           });
       }
   });
+document.addEventListener('change', (event) => {
+  if (event.target.classList.contains('toggle-switch')) {
+    const id = event.target.id.split('-')[1];
+    toggleCompletion(event, id);
+  }
+});
+async function toggleCompletion(event, id) {
+  event.preventDefault();
+
+  try {
+    const checkbox = event.target;
+    const status = checkbox.checked ? 'completed' : 'not-completed';
+
+    const response = await fetch(`/toggle/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completed: status }),
+    });
+
+    const result = await response.json();
+
+    showSnackbar(result.message, result.success ? 'is-success' : 'is-danger');
+    if (result.success) {
+    const statusElement = document.querySelector(`#status-${id}`);
+      if (statusElement) {
+        statusElement.textContent = status === 'completed' ? 'Status: Completed' : 'Status: Not Completed';
+      }
+    } else {
+      checkbox.checked = !checkbox.checked;
+    }
+  } catch (error) {
+    console.error('Error toggling completion:', error);
+    showSnackbar('An error occurred while updating the status. Please try again.', 'is-danger');
+  }
+}
+
+/**
+ * Displays a snackbar notification.
+ * @param {string} message - The message to display.
+ * @param {string} type - The Bulma color class (e.g., 'is-success', 'is-danger').
+ */
+function showSnackbar(message, type) {
+  const container = document.getElementById('snackbar-container');
+  const snackbar = document.createElement('div');
+  snackbar.className = `notification ${type} is-light snackbar`;
+  snackbar.textContent = message;
+  const closeButton = document.createElement('button');
+  closeButton.className = 'delete';
+  closeButton.addEventListener('click', () => snackbar.remove());
+  snackbar.prepend(closeButton);
+  container.appendChild(snackbar);
+  container.classList.remove('is-hidden');
+  setTimeout(() => {
+    snackbar.remove();
+    if (container.childElementCount === 0) {
+      container.classList.add('is-hidden');
+    }
+  }, 3000);
+}
 </script>
 </body>
 </html>

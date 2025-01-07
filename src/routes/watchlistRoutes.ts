@@ -8,13 +8,13 @@ const decodeSlug = (slug: string): string => {
   return slug.replace(/-/g, " ");
 };
 
-router.get("/", getAllItems);
-router.get("/watchlist", AllItems);
+router.get("/", AllItems);
+router.get("/dashboard", getAllItems);
 router.post("/add", addItem);
 router.get("/edit/:id", getEditForm);
 router.post("/edit", editItem);
 router.post("/delete/:id", deleteItem);
-router.post("/toggle/:id", toggleCompletion); 
+router.post("/toggle/:id", toggleCompletion);
 
 router.get("/item-updated", (req, res) => {
   res.render("success", { message: "Item updated successfully." });

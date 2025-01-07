@@ -203,15 +203,18 @@ export const toggleCompletion = async (req: Request, res: Response): Promise<voi
     const item = data.find((item) => item.id === id);
 
     if (!item) {
-      redirectWithError(res, "message=Item not found.");
+      res.status(404).json({ success: false, message: "Item not found." });
       return;
     }
 
     item.completed = item.completed === "completed" ? "not-completed" : "completed";
 
     await writeData(data);
-    res.redirect("/item-updated");
+    res.status(200).json({
+      success: true,
+      message: `Status updated to ${item.completed === "completed" ? "Completed" : "Not Completed"}.`,
+    });
   } catch (error) {
-    redirectWithError(res, "Failed to toggle completion status. Please try again.");
+    res.status(500).json({ success: false, message: "Failed to toggle completion status. Please try again." });
   }
 };
