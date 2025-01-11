@@ -19,5 +19,12 @@
     "completed": "completed",
     "its": "movie",
     "notes": "TV Show available in Netflix"
+  },
+  {
+    "id": "1736600271669",
+    "name": "Marco (2024)",
+    "completed": "not-completed",
+    "its": "movie",
+    "notes": "Marco is a 2024 Indian Malayalam-language action thriller film"
   }
 ]

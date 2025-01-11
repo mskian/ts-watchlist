@@ -103,13 +103,13 @@ select {
     <form action="/edit" method="POST">
       <input type="hidden" name="id" value="<%= item.id %>">
       <div class="field">
-        <label class="label">Name</label>
+        <label class="label has-text-danger mt-5">Name:</label>
         <div class="control">
           <input class="input is-warning" type="text" name="name" value="<%= item.name %>">
         </div>
       </div>
       <div class="field">
-        <label class="label">Status</label>
+        <label class="label has-text-danger mt-5">Status:</label>
         <div class="control">
           <div class="select is-warning">
             <select name="completed">
@@ -119,12 +119,12 @@ select {
           </div>
           <br><br>
           <button type="button" class="button is-warning" onclick="toggleStatus()">
-            Change Status
+            Change Status:
           </button>
         </div>
       </div>  
       <div class="field">
-        <label class="label">It's a</label>
+        <label class="label has-text-danger mt-5">It's a:</label>
         <div class="control">
           <div class="select is-warning">
             <select name="its">
@@ -135,7 +135,7 @@ select {
         </div>
       </div>      
       <div class="field">
-        <label class="label">Notes</label>
+        <label class="label has-text-danger mt-5">Notes:</label>
         <div class="control">
           <textarea class="textarea is-warning" name="notes"><%= item.notes %></textarea>
         </div>

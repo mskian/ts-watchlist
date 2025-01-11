@@ -208,6 +208,7 @@ select {
         <div class="navbar-end">
             <a class="navbar-item" href="/">HOME</a>
             <a class="navbar-item" href="/dashboard">Add List</a>
+            <a class="navbar-item" href="/logout">Log out</a>
         </div>
     </div>
 </nav>
@@ -215,11 +216,11 @@ select {
   <div class="container">
     <h1 class="title">Add Watchlist</h1>
     <form action="/add" method="POST">
-        <label class="label">Name</label>
+        <label class="label has-text-danger">Name:</label>
         <div class="control">
           <input class="input is-warning" type="text" name="name" placeholder="Moive or Series Name">
         </div>
-        <label class="label">Status</label>
+        <label class="label has-text-danger mt-5">Status:</label>
         <div class="control">
           <div class="select is-warning">
             <select name="completed">
@@ -232,7 +233,7 @@ select {
             Change Status
           </button>
         </div>
-        <label class="label">It's a</label>
+        <label class="label has-text-danger mt-5">It's a:</label>
         <div class="control">
           <div class="select is-warning">
             <select name="its">
@@ -242,7 +243,7 @@ select {
           </div>
         </div>
       <div class="field">
-        <label class="label">Notes</label>
+        <label class="label has-text-danger mt-5">Notes:</label>
         <div class="control">
           <textarea class="textarea is-warning" name="notes"></textarea>
         </div>

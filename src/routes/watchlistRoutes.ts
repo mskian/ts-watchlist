@@ -1,5 +1,12 @@
 import express, { Request, Response } from "express";
 import sanitizeHtml from "sanitize-html";
+import {
+  renderKeyPage,
+  validateKey,
+  logout,
+  keyRateLimiter
+} from "../controllers/authController";
+import { isAuthorized } from "../middlewares/keyMiddleware";
 import { getAllItems, AllItems, addItem, getEditForm, editItem, deleteItem, toggleCompletion } from "../controllers/watchlistController";
 
 const router = express.Router();
@@ -8,13 +15,17 @@ const decodeSlug = (slug: string): string => {
   return slug.replace(/-/g, " ");
 };
 
-router.get("/", AllItems);
-router.get("/dashboard", getAllItems);
-router.post("/add", addItem);
-router.get("/edit/:id", getEditForm);
-router.post("/edit", editItem);
-router.post("/delete/:id", deleteItem);
-router.post("/toggle/:id", toggleCompletion);
+router.get("/key", renderKeyPage);
+router.post("/key", keyRateLimiter, validateKey);
+router.get("/logout", logout);
+
+router.get("/", isAuthorized, AllItems);
+router.get("/dashboard", isAuthorized, getAllItems);
+router.post("/add", isAuthorized, addItem);
+router.get("/edit/:id", isAuthorized, getEditForm);
+router.post("/edit", isAuthorized, editItem);
+router.post("/delete/:id", isAuthorized, deleteItem);
+router.post("/toggle/:id", isAuthorized, toggleCompletion);
 
 router.get("/item-updated", (req, res) => {
   res.render("success", { message: "Item updated successfully." });

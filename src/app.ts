@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import path from "path";
+import cookieParser from "cookie-parser";
 import watchlistRoutes from "./routes/watchlistRoutes";
 import { setSecureHeaders } from "./middlewares/secureHeaders";
 import errorHandler from './middlewares/error';
@@ -8,6 +9,7 @@ const app: Application = express();
 const PORT = process.env.PORT || 6020;
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({
     extended: true
 }));
