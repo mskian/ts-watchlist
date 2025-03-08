@@ -1,6 +1,6 @@
 {
   "name": "ts-movie-watchlist",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "main": "./dist/app.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
@@ -23,10 +23,10 @@
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.10.5",
+    "@types/node": "^22.13.9",
     "@types/sanitize-html": "^2.13.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.2"
   }
 }
